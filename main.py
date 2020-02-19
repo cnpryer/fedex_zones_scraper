@@ -34,15 +34,9 @@ def init():
 def get_response_soup(origin:str, dest:str):
     """return soup of html to parse. Session init could be abstracted."""
     session = requests.session()
-    url = 'http://www.fedex.com/ratetools/RateToolsMain.do;OTHERRATETOOLSSESSIONID=eZFaiytexLZ4nU67JFGPNSxgutLH1nF0aEv64w9UPYlOVqlujg85!-1418544371'
-    data = {
-        'method': 'FindZones',
-        'origPostalCd': origin,
-        'destCountryCd': 'us',
-        'destPostalCd': dest
-    }
-
-    response = session.post(url, data=data)
+    url = ('http://www.fedex.com/ratetools/RateToolsMain.do?method=FindZones'
+            '&origPostalCd=%s&destCountryCd=us&destPostalCd=%s') % (origin, dest)
+    response = session.get(url)
     return BeautifulSoup(response.content, 'html.parser')
 
 def parse_response_soup(soup:BeautifulSoup):
